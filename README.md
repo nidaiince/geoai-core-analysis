@@ -3,7 +3,7 @@
 AI-based geological core analysis system for automatic RQD/TCR/SCR estimation using computer vision and deep learning.
 
 # Developer & Founder
-GeoAI Core Analysis was developed and founded by Nida İNCE.
+GeoNA Core Analysis was developed and founded by Nida İNCE.
 
 ---
 
@@ -134,5 +134,5 @@ geoai-core-analysis/
 
 # Developer & Founder
 
-GeoAI Core Analysis was developed and founded by Nida İNCE.
+GeoNA Core Analysis was developed and founded by Nida İNCE.
 
