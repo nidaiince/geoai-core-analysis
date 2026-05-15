@@ -21,17 +21,16 @@ if uploaded_file:
 
     st.image(image, caption="Yüklenen Görüntü")
 
-    # Temp kayıt
-    temp_path = "temp.jpg"
-    image.save(temp_path)
+  # Temp kayıt
+temp_path = "temp.jpg"
+image.save(temp_path)
 
-    # Tahmin
-    results = model.predict(
-        source=temp_path,
-        conf=0.10
-    )
+# Tahmin
+results = model(temp_path)
 
-    names = model.names
+st.write(results)
+
+names = model.names
 
     boxes = results[0].boxes.xyxy.cpu().numpy()
     classes = results[0].boxes.cls.cpu().numpy()
