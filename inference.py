@@ -69,7 +69,7 @@ for row in sorted_rows:
 
     total_core = 0
     rqd_core = 0
-
+    scr_core = 0
     # Tray genişliği
     min_x = min([b[0] for b in row])
     max_x = max([b[2] for b in row])
@@ -88,18 +88,26 @@ for row in sorted_rows:
 
         if core_len >= 0.10:
             rqd_core += core_len
+            if core_len >= 0.30:
+    scr_core += core_len
 
     rqd = (rqd_core / tray_real_m) * 100
     tcr = (total_core / tray_real_m) * 100
+    scr = (scr_core / tray_real_m) * 100
 
     if rqd > 100:
         rqd = 100
 
     if tcr > 100:
         tcr = 100
+    
+    if scr > 100:
+    scr = 100
+        
 
     print(f"\nRQD = %{rqd:.2f}")
-    print(f"TCR = %{tcr:.2f}")
+   print(f"TCR = %{tcr:.2f}")
+   print(f"SCR = %{scr:.2f}")
     print(f"Toplam Core = {total_core:.2f} m")
 
     run_no += 1
