@@ -17,13 +17,13 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file:
 
-   image = Image.open(uploaded_file).convert("RGB")
+    image = Image.open(uploaded_file).convert("RGB")
 
-   st.image(image, caption="Yüklenen Görüntü")
+    st.image(image, caption="Yüklenen Görüntü")
 
     # Temp kayıt
-   temp_path = "temp.jpg"
-   image.save(temp_path)
+    temp_path = "temp.jpg"
+    image.save(temp_path)
 
     # Tahmin
     results = model.predict(
@@ -35,7 +35,7 @@ if uploaded_file:
 
     boxes = results[0].boxes.xyxy.cpu().numpy()
     classes = results[0].boxes.cls.cpu().numpy()
-
+    
     core_count = 0
 
     for cls in classes:
