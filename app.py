@@ -7,7 +7,7 @@ st.title("GeoNA Core Analysis")
 st.write("AI-based geological core analysis system")
 
 # Model yükle
-model = YOLO("best_core_model.pt")
+model = YOLO("best.pt")
 
 uploaded_file = st.file_uploader(
     "Karot görüntüsü yükle",
