@@ -17,18 +17,17 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file:
 
-    image = Image.open(uploaded_file)
+   image = Image.open(uploaded_file).convert("RGB")
 
     st.image(image, caption="Yüklenen Görüntü")
 
     # Temp kayıt
-    temp_file = tempfile.NamedTemporaryFile(delete=False)
-
-    image.save(temp_file.name)
+    temp_path = "temp.jpg"
+   image.save(temp_path)
 
     # Tahmin
     results = model.predict(
-        source=temp_file.name,
+        source=temp_path,
         conf=0.10
     )
 
