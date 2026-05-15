@@ -32,10 +32,14 @@ st.write(results)
 
 names = model.names
 
+boxes = []
+classes = []
+
+if results[0].boxes is not None:
     boxes = results[0].boxes.xyxy.cpu().numpy()
     classes = results[0].boxes.cls.cpu().numpy()
-    
-    core_count = 0
+
+core_count = 0
 
     for cls in classes:
 
