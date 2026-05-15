@@ -1,7 +1,6 @@
 import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
-import tempfile
 
 st.title("GeoNA Core Analysis")
 
@@ -21,25 +20,25 @@ if uploaded_file:
 
     st.image(image, caption="Yüklenen Görüntü")
 
-  # Temp kayıt
-temp_path = "temp.jpg"
-image.save(temp_path)
+    # Temp kayıt
+    temp_path = "temp.jpg"
+    image.save(temp_path)
 
-# Tahmin
-results = model(temp_path)
+    # Tahmin
+    results = model(temp_path)
 
-st.write(results)
+    st.write(results)
 
-names = model.names
+    names = model.names
 
-boxes = []
-classes = []
+    boxes = []
+    classes = []
 
-if results[0].boxes is not None:
-    boxes = results[0].boxes.xyxy.cpu().numpy()
-    classes = results[0].boxes.cls.cpu().numpy()
+    if results[0].boxes is not None:
+        boxes = results[0].boxes.xyxy.cpu().numpy()
+        classes = results[0].boxes.cls.cpu().numpy()
 
-core_count = 0
+    core_count = 0
 
     for cls in classes:
 
@@ -48,7 +47,7 @@ core_count = 0
         if label == "core_segment":
             core_count += 1
 
-    st.success(f"Detected Core Segments: {core_count}")
+    st.metric("Detected Core Segments", core_count)
 
     st.write("RQD Analysis Active")
     st.write("TCR Analysis Active")
