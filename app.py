@@ -4,6 +4,7 @@ from PIL import Image
 
 # Başlık
 st.title("GeoNA Core Analysis")
+
 st.write("AI-based geological core analysis system")
 
 # Model yükle
@@ -15,7 +16,7 @@ uploaded_file = st.file_uploader(
     type=["jpg", "jpeg", "png"]
 )
 
-# Görüntü varsa çalış
+# Eğer görüntü yüklendiyse
 if uploaded_file is not None:
 
     # Görsel aç
@@ -24,21 +25,20 @@ if uploaded_file is not None:
     # Görsel göster
     st.image(image, caption="Yüklenen Görüntü")
 
-    # Geçici kaydet
+    # Temp kayıt
     temp_path = "temp.jpg"
     image.save(temp_path)
 
-    # Tahmin
+    # Model tahmini
     results = model(temp_path)
 
-    # Sınıf isimleri
+    # Class isimleri
     names = model.names
 
-    # Box ve class listeleri
+    # Detection listeleri
     boxes = []
     classes = []
 
-    # Detection varsa al
     if results[0].boxes is not None:
 
         boxes = results[0].boxes.xyxy.cpu().numpy()
@@ -47,49 +47,48 @@ if uploaded_file is not None:
     # Sayaçlar
     core_count = 0
 
-    total_core_ratio = 0
-    rqd_ratio = 0
-    scr_ratio = 0
+    total_core = 0
+    rqd_core = 0
+    scr_core = 0
 
-    # Görüntü genişliği
+    # Görsel genişliği
     image_width = image.width
+
+    # Ortalama tray genişliği
+    tray_width = image_width * 0.22
 
     # Detection loop
     for box, cls in zip(boxes, classes):
 
         label = names[int(cls)]
 
-        # Sadece core segmentleri kullan
+        # Sadece core segment kullan
         if label == "core_segment":
 
             core_count += 1
 
-            # Box koordinatları
             x1, y1, x2, y2 = box
 
-            # Segment genişliği
-            segment_width = x2 - x1
-
-            # Görsel oranı
-            ratio = segment_width / image_width
+            # Segment uzunluğu oranı
+            ratio = (x2 - x1) / tray_width
 
             # TCR
-            total_core_ratio += ratio
+            total_core += ratio
 
-            # RQD
-            if ratio >= 0.03:
-                rqd_ratio += ratio
+            # RQD (10 cm üstü)
+            if ratio >= 0.10:
+                rqd_core += ratio
 
-            # SCR
-            if ratio >= 0.08:
-                scr_ratio += ratio
+            # SCR (30 cm üstü)
+            if ratio >= 0.30:
+                scr_core += ratio
 
     # Yüzdelere çevir
-    tcr = total_core_ratio * 100
-    rqd = rqd_ratio * 100
-    scr = scr_ratio * 100
+    tcr = total_core * 100
+    rqd = rqd_core * 100
+    scr = scr_core * 100
 
-    # Limit
+    # Maksimum 100
     tcr = min(tcr, 100)
     rqd = min(rqd, 100)
     scr = min(scr, 100)
