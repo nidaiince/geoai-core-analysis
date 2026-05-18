@@ -56,10 +56,10 @@ if uploaded_file:
 
             total_core += core_length
 
-            if core_length >= 0.10:
+            if core_length >= 0.03:
                 rqd_core += core_length
 
-            if core_length >= 0.30:
+            if core_length >= 0.08:
                 scr_core += core_length
 
     rqd = rqd_core * 100
