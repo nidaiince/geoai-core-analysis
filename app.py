@@ -42,6 +42,9 @@ if uploaded_file:
     rqd_core = 0
     scr_core = 0
 
+    # Tray genişliği yaklaşık hesap
+    tray_width = image.width * 0.22
+
     for box, cls in zip(boxes, classes):
 
         label = names[int(cls)]
@@ -50,31 +53,28 @@ if uploaded_file:
 
             core_count += 1
 
-           x1, y1, x2, y2 = box
+            x1, y1, x2, y2 = box
 
-tray_width = image.width * 0.22
+            core_length = (x2 - x1) / tray_width
 
-core_length = (x2 - x1) / tray_width
             total_core += core_length
 
-            if core_length >= 0.03:
+            # RQD threshold
+            if core_length >= 0.10:
                 rqd_core += core_length
 
-            if core_length >= 0.08:
+            # SCR threshold
+            if core_length >= 0.30:
                 scr_core += core_length
 
     rqd = rqd_core * 100
     tcr = total_core * 100
     scr = scr_core * 100
 
-    if rqd > 100:
-        rqd = 100
-
-    if tcr > 100:
-        tcr = 100
-
-    if scr > 100:
-        scr = 100
+    # Clamp
+    rqd = min(rqd, 100)
+    tcr = min(tcr, 100)
+    scr = min(scr, 100)
 
     st.success(f"Detected Core Segments: {core_count}")
 
