@@ -50,10 +50,11 @@ if uploaded_file:
 
             core_count += 1
 
-            x1, y1, x2, y2 = box
+           x1, y1, x2, y2 = box
 
-            core_length = (x2 - x1) / image.width
+tray_width = image.width * 0.22
 
+core_length = (x2 - x1) / tray_width
             total_core += core_length
 
             if core_length >= 0.03:
