@@ -131,10 +131,62 @@ if uploaded_file is not None:
 
     # ---------------------------------------------------
     # Sonuçlar
-    # ---------------------------------------------------
+  # ---------------------------------------------------
+# Kırık Sayısı
+# ---------------------------------------------------
 
-    st.success(f"Detected Core Segments: {len(segment_lengths)}")
+fracture_count = len(segment_lengths)
 
-    st.metric("TCR", f"{tcr:.2f}%")
-    st.metric("SCR", f"{scr:.2f}%")
-    st.metric("RQD", f"{rqd:.2f}%")
+# ---------------------------------------------------
+# Kaya Dayanımı
+# ---------------------------------------------------
+
+if fracture_count <= 5:
+    rock_strength = "Çok Sağlam"
+
+elif fracture_count <= 10:
+    rock_strength = "Sağlam"
+
+elif fracture_count <= 18:
+    rock_strength = "Orta Dayanımlı"
+
+elif fracture_count <= 30:
+    rock_strength = "Zayıf"
+
+else:
+    rock_strength = "Çok Zayıf"
+
+# ---------------------------------------------------
+# Kaya Kalitesi
+# ---------------------------------------------------
+
+if rqd >= 90:
+    rock_quality = "Mükemmel"
+
+elif rqd >= 75:
+    rock_quality = "İyi"
+
+elif rqd >= 50:
+    rock_quality = "Orta"
+
+elif rqd >= 25:
+    rock_quality = "Zayıf"
+
+else:
+    rock_quality = "Çok Zayıf"
+
+# ---------------------------------------------------
+# Sonuçlar
+# ---------------------------------------------------
+
+st.success(f"Detected Core Segments: {len(segment_lengths)}")
+
+st.metric("TCR", f"{tcr:.2f}%")
+st.metric("SCR", f"{scr:.2f}%")
+st.metric("RQD", f"{rqd:.2f}%")
+
+st.metric("Kırık Sayısı", fracture_count)
+
+st.metric("Kaya Dayanımı", rock_strength)
+
+st.metric("Kaya Kalitesi", rock_quality)
