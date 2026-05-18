@@ -115,7 +115,7 @@ if uploaded_file is not None:
             rqd_core += length
 
         # SCR -> 30 cm üstü
-        if length >= 0.30:
+        if length >= 0.18:
             scr_core += length
 
     # Ortalama 4 tray normalize
