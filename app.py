@@ -11,13 +11,13 @@ st.title("GeoNA Core Analysis")
 st.write("AI-based geological core analysis system")
 
 # ---------------------------------------------------
-# Model
+# Model yükle
 # ---------------------------------------------------
 
 model = YOLO("best (3).pt")
 
 # ---------------------------------------------------
-# Upload
+# Görsel yükleme
 # ---------------------------------------------------
 
 uploaded_file = st.file_uploader(
@@ -26,7 +26,7 @@ uploaded_file = st.file_uploader(
 )
 
 # ---------------------------------------------------
-# Görsel yüklenirse
+# Görsel geldiyse
 # ---------------------------------------------------
 
 if uploaded_file is not None:
@@ -41,13 +41,14 @@ if uploaded_file is not None:
     temp_path = "temp.jpg"
     image.save(temp_path)
 
-    # YOLO inference
+    # ---------------------------------------------------
+    # YOLO Tahmin
+    # ---------------------------------------------------
+
     results = model(temp_path)
 
-    # Class isimleri
     names = model.names
 
-    # Detectionlar
     boxes = []
     classes = []
 
@@ -73,6 +74,7 @@ if uploaded_file is not None:
 
             x1, y1, x2, y2 = box
 
+            # Segment genişliği
             segment_width = x2 - x1
 
             # Normalize uzunluk
@@ -130,63 +132,63 @@ if uploaded_file is not None:
     rqd = min(rqd, 100)
 
     # ---------------------------------------------------
+    # Kırık Sayısı
+    # ---------------------------------------------------
+
+    fracture_count = len(segment_lengths)
+
+    # ---------------------------------------------------
+    # Kaya Dayanımı
+    # ---------------------------------------------------
+
+    if fracture_count <= 5:
+        rock_strength = "Çok Sağlam"
+
+    elif fracture_count <= 10:
+        rock_strength = "Sağlam"
+
+    elif fracture_count <= 18:
+        rock_strength = "Orta Dayanımlı"
+
+    elif fracture_count <= 30:
+        rock_strength = "Zayıf"
+
+    else:
+        rock_strength = "Çok Zayıf"
+
+    # ---------------------------------------------------
+    # Kaya Kalitesi
+    # ---------------------------------------------------
+
+    if rqd >= 90:
+        rock_quality = "Mükemmel"
+
+    elif rqd >= 75:
+        rock_quality = "İyi"
+
+    elif rqd >= 50:
+        rock_quality = "Orta"
+
+    elif rqd >= 25:
+        rock_quality = "Zayıf"
+
+    else:
+        rock_quality = "Çok Zayıf"
+
+    # ---------------------------------------------------
     # Sonuçlar
-  # ---------------------------------------------------
-# Kırık Sayısı
-# ---------------------------------------------------
+    # ---------------------------------------------------
 
-fracture_count = len(segment_lengths)
+    st.success(f"Detected Core Segments: {len(segment_lengths)}")
 
-# ---------------------------------------------------
-# Kaya Dayanımı
-# ---------------------------------------------------
+    st.metric("TCR", f"{tcr:.2f}%")
 
-if fracture_count <= 5:
-    rock_strength = "Çok Sağlam"
+    st.metric("SCR", f"{scr:.2f}%")
 
-elif fracture_count <= 10:
-    rock_strength = "Sağlam"
+    st.metric("RQD", f"{rqd:.2f}%")
 
-elif fracture_count <= 18:
-    rock_strength = "Orta Dayanımlı"
+    st.metric("Kırık Sayısı", fracture_count)
 
-elif fracture_count <= 30:
-    rock_strength = "Zayıf"
+    st.metric("Kaya Dayanımı", rock_strength)
 
-else:
-    rock_strength = "Çok Zayıf"
-
-# ---------------------------------------------------
-# Kaya Kalitesi
-# ---------------------------------------------------
-
-if rqd >= 90:
-    rock_quality = "Mükemmel"
-
-elif rqd >= 75:
-    rock_quality = "İyi"
-
-elif rqd >= 50:
-    rock_quality = "Orta"
-
-elif rqd >= 25:
-    rock_quality = "Zayıf"
-
-else:
-    rock_quality = "Çok Zayıf"
-
-# ---------------------------------------------------
-# Sonuçlar
-# ---------------------------------------------------
-
-st.success(f"Detected Core Segments: {len(segment_lengths)}")
-
-st.metric("TCR", f"{tcr:.2f}%")
-st.metric("SCR", f"{scr:.2f}%")
-st.metric("RQD", f"{rqd:.2f}%")
-
-st.metric("Kırık Sayısı", fracture_count)
-
-st.metric("Kaya Dayanımı", rock_strength)
-
-st.metric("Kaya Kalitesi", rock_quality)
+    st.metric("Kaya Kalitesi", rock_quality)
