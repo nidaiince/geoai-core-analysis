@@ -115,8 +115,8 @@ if uploaded_file is not None:
             rqd_core += length
 
         # SCR -> 30 cm üstü
-        if length >= 0.45:
-            scr_core += length
+        if 0.18 <= length <= 0.40:
+            scr_core += length * 0.5
 
     # Ortalama 4 tray normalize
     tray_count = 4
