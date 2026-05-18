@@ -16,15 +16,17 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file:
 
+    # Görsel aç
     image = Image.open(uploaded_file).convert("RGB")
 
+    # Görsel göster
     st.image(image, caption="Yüklenen Görüntü")
 
     # Temp kayıt
     temp_path = "temp.jpg"
     image.save(temp_path)
 
-    # Tahmin
+    # Model tahmini
     results = model(temp_path)
 
     names = model.names
@@ -45,6 +47,7 @@ if uploaded_file:
     # Tray genişliği yaklaşık hesap
     tray_width = image.width * 0.22
 
+    # Tespit edilen karotları işle
     for box, cls in zip(boxes, classes):
 
         label = names[int(cls)]
@@ -55,29 +58,33 @@ if uploaded_file:
 
             x1, y1, x2, y2 = box
 
+            # Karot uzunluğu
             core_length = (x2 - x1) / tray_width
 
             total_core += core_length
 
-            # RQD threshold
+            # RQD (>10 cm)
             if core_length >= 0.10:
                 rqd_core += core_length
 
-            # SCR threshold
+            # SCR (>30 cm)
             if core_length >= 0.30:
                 scr_core += core_length
 
-     tray_total = 4.0
+    # Toplam tray uzunluğu
+    tray_total = 4.0
 
-     rqd = (rqd_core / tray_total) * 100
-     tcr = (total_core / tray_total) * 100
-     scr = (scr_core / tray_total) * 100
+    # Hesaplamalar
+    rqd = (rqd_core / tray_total) * 100
+    tcr = (total_core / tray_total) * 100
+    scr = (scr_core / tray_total) * 100
 
-    # Clamp
+    # 100 üstüne çıkmasın
     rqd = min(rqd, 100)
     tcr = min(tcr, 100)
     scr = min(scr, 100)
 
+    # Sonuçlar
     st.success(f"Detected Core Segments: {core_count}")
 
     st.metric("RQD", f"{rqd:.2f}%")
