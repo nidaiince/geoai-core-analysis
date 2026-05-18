@@ -111,7 +111,7 @@ if uploaded_file is not None:
         total_core += length
 
         # SCR → orta + uzun segmentler
-        if length >= 0.08:
+        if length >= 0.15:
             scr_core += length
 
         # RQD → sadece uzun segmentler
