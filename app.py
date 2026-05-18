@@ -67,9 +67,11 @@ if uploaded_file:
             if core_length >= 0.30:
                 scr_core += core_length
 
-    rqd = rqd_core * 100
-    tcr = total_core * 100
-    scr = scr_core * 100
+   tray_total = 4.0
+
+rqd = (rqd_core / tray_total) * 100
+tcr = (total_core / tray_total) * 100
+scr = (scr_core / tray_total) * 100
 
     # Clamp
     rqd = min(rqd, 100)
